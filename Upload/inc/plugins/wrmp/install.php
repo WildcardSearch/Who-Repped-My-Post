@@ -72,7 +72,7 @@ EOF;
 		"website" => 'https://github.com/WildcardSearch/Who-Repped-My-Post',
 		"author" => $author,
 		"authorsite" => 'http://www.rantcentralforums.com',
-		"version" => '1.0',
+		"version" => '1.0.1',
 		"compatibility" => '16*',
 		"guid" => '6a9a29dcb7af694de01c60a56d66c9b0',
 	);
