@@ -12,9 +12,9 @@ wrmp_initialize();
 
 /**
  * wrmp_postbit()
- * 
+ *
  * display post reps info where applicable
- * 
+ *
  * @param - &$post - (array) the current post info
  * @return: void
  */
@@ -35,34 +35,36 @@ function wrmp_postbit(&$post)
 
 	$pid = (int) $post['pid'];
 
-	if(isset($wrmp[$pid]))
+	if(!isset($wrmp[$pid]))
 	{
-		switch($mybb->settings['wrmp_position']) {
-		case 'postbit':
-			if($mybb->settings['postlayout'] == "classic")
-			{
-				eval("\$post['wrmp_postbit'] = \"" . $templates->get('wrmp_postbit_classic') . "\";");
-			}
-			else
-			{
-				eval("\$post['wrmp_postbit'] = \"" . $templates->get('wrmp_postbit') . "\";");
-			}
-			break;
-		case 'post':
-			eval("\$post['message'] .= \"" . $templates->get('wrmp_post') . "\";");
-			break;
-		default:
-			eval("\$post['wrmp_below'] = \"" . $templates->get('wrmp_below') . "\";");
-			break;
+		return;
+	}
+
+	switch($mybb->settings['wrmp_position']) {
+	case 'postbit':
+		if($mybb->settings['postlayout'] == "classic")
+		{
+			eval("\$post['wrmp_postbit'] = \"" . $templates->get('wrmp_postbit_classic') . "\";");
 		}
+		else
+		{
+			eval("\$post['wrmp_postbit'] = \"" . $templates->get('wrmp_postbit') . "\";");
+		}
+		break;
+	case 'post':
+		eval("\$post['message'] .= \"" . $templates->get('wrmp_post') . "\";");
+		break;
+	default:
+		eval("\$post['wrmp_below'] = \"" . $templates->get('wrmp_below') . "\";");
+		break;
 	}
 }
 
 /**
  * wrmp_build_cache()
- * 
+ *
  * build the rep info for all the posts on this page
- * 
+ *
  * @param - &$wrmp - (array) a reference to the post rep cache
  * @return - void
  */
@@ -78,7 +80,7 @@ function wrmp_build_cache(&$wrmp)
 	{
 		$where = "p.pid={$mybb->input['pid']}";
 	}
-	
+
 	$query_string = <<<EOF
 SELECT
 	r.pid, r.comments, r.reputation AS repvalue,
@@ -100,13 +102,13 @@ EOF;
 		return;
 	}
 
-	$pids = array();
+	$all_reps = array();
 	while($user = $db->fetch_array($query))
 	{
-		$pids[$user['pid']][$user['uid']] = $user;
+		$all_reps[$user['pid']][$user['uid']] = $user;
 	}
 
-	foreach($pids as $pid => $users)
+	foreach($all_reps as $pid => $users)
 	{
 		$other_reps = '';
 		$too_many_names = $too_many = $rep_count = $reppers = array();
@@ -232,9 +234,9 @@ EOF;
 
 /**
  * wrmp_initialize()
- * 
+ *
  * hook into the postbit and cache templates if applicable
- * 
+ *
  * @return: void
  */
 function wrmp_initialize()
