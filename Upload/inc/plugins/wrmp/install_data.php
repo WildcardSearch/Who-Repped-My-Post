@@ -1,6 +1,6 @@
 <?php
 /*
- * Plugin Name: Who Repped My Post? for MyBB 1.6.x
+ * Plugin Name: Who Repped My Post? for MyBB 1.8.x
  * Copyright 2014 WildcardSearch
  * http://www.rantcentralforums.com
  *
@@ -98,15 +98,15 @@ $templates = array(
 		),
 		"templates" => array(
 			"wrmp_reps_negative" => <<<EOF
-{\$sep}<span style="padding: 5px;"><img style="position: relative; top: 3px;" src="{\$mybb->settings['bburl']}/{\$theme['imgdir']}/wrmp/negative.png" alt="{\$lang->wrmp_negative}" title="{\$lang->wrmp_negative_reps}"/>&nbsp;{\$who_repped_me}{\$other_reps}</span>
+{\$sep}<span style="padding: 5px;"><img style="position: relative; top: 3px;" src="{\$theme['imgdir']}/wrmp/negative.png" alt="{\$lang->wrmp_negative}" title="{\$lang->wrmp_negative_reps}"/>&nbsp;{\$who_repped_me}{\$other_reps}</span>
 EOF
 			,
 			"wrmp_reps_neutral" => <<<EOF
-{\$sep}<span style="padding: 5px;"><img style="position: relative; top: 3px;" src="{\$mybb->settings['bburl']}/{\$theme['imgdir']}/wrmp/neutral.png" alt="{\$lang->wrmp_neutral}" title="{\$lang->wrmp_neutral_reps}"/>&nbsp;{\$who_repped_me}{\$other_reps}</span>
+{\$sep}<span style="padding: 5px;"><img style="position: relative; top: 3px;" src="{\$theme['imgdir']}/wrmp/neutral.png" alt="{\$lang->wrmp_neutral}" title="{\$lang->wrmp_neutral_reps}"/>&nbsp;{\$who_repped_me}{\$other_reps}</span>
 EOF
 			,
 			"wrmp_reps_positive" => <<<EOF
-{\$sep}<span style="padding: 5px;"><img style="position: relative; top: 3px;" src="{\$mybb->settings['bburl']}/{\$theme['imgdir']}/wrmp/positive.png" alt="{\$lang->wrmp_positive}" title="{\$lang->wrmp_positive_reps}"/>&nbsp;{\$who_repped_me}{\$other_reps}</span>
+{\$sep}<span style="padding: 5px;"><img style="position: relative; top: 3px;" src="{\$theme['imgdir']}/wrmp/positive.png" alt="{\$lang->wrmp_positive}" title="{\$lang->wrmp_positive_reps}"/>&nbsp;{\$who_repped_me}{\$other_reps}</span>
 EOF
 			,
 			"wrmp_postbit" => <<<EOF

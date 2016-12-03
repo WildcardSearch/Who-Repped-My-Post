@@ -1,6 +1,6 @@
 <?php
 /*
- * Plugin Name: Who Repped My Post? for MyBB 1.6.x
+ * Plugin Name: Who Repped My Post? for MyBB 1.8.x
  * Copyright 2014 WildcardSearch
  * http://www.rantcentralforums.com
  *
@@ -72,8 +72,8 @@ EOF;
 		"website" => 'https://github.com/WildcardSearch/Who-Repped-My-Post',
 		"author" => $author,
 		"authorsite" => 'http://www.rantcentralforums.com',
-		"version" => '1.0.1',
-		"compatibility" => '16*',
+		"version" => '2.0',
+		"compatibility" => '18*',
 		"guid" => '6a9a29dcb7af694de01c60a56d66c9b0',
 	);
 }

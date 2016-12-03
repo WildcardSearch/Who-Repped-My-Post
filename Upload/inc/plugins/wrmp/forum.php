@@ -1,6 +1,6 @@
 <?php
 /*
- * Plugin Name: Who Repped My Post? for MyBB 1.6.x
+ * Plugin Name: Who Repped My Post? for MyBB 1.8.x
  * Copyright 2014 WildcardSearch
  * http://www.rantcentralforums.com
  *
@@ -154,6 +154,9 @@ EOF;
 
 			// build the name link
 			$user_name = format_name($user['username'], $user['usergroup'], $user['displaygroup']);
+
+			$user_name = str_replace('style="', 'style="background-image: none; padding-left: 0px; ', $user_name);
+
 			$user_link = get_profile_link($user['uid']);
 			eval("\$reppers[\$rep_value][] = \"" . $templates->get('wrmp_user_link', 1, 0) . "\";");
 			$did_something = true;
