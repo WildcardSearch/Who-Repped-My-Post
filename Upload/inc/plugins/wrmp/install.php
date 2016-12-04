@@ -34,11 +34,10 @@ function wrmp_info()
 	</li>
 </ul>
 EOF;
-	}
 
-	$button_pic = "styles/{$cp_style}/images/wrmp/donate.gif";
-	$border_pic = "styles/{$cp_style}/images/wrmp/pixel.gif";
-	$wrmp_description = <<<EOF
+		$button_pic = "styles/{$cp_style}/images/wrmp/donate.gif";
+		$border_pic = "styles/{$cp_style}/images/wrmp/pixel.gif";
+		$wrmp_description = <<<EOF
 <table width="100%">
 	<tbody>
 		<tr>
@@ -57,6 +56,9 @@ EOF;
 	</tbody>
 </table>
 EOF;
+	} else {
+		$wrmp_description = $lang->wrmp_description;
+	}
 
 	$name = <<<EOF
 <span style="font-familiy: arial; font-size: 1.5em; color: #AD5F32; text-shadow: 2px 2px 2px #664B39;">{$lang->wrmp}</span>
