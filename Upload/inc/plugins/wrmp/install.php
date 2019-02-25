@@ -94,10 +94,6 @@ function wrmp_install()
 		$lang->load('wrmp');
 	}
 
-	if (!class_exists('WildcardPluginInstaller')) {
-		require_once MYBB_ROOT.'inc/plugins/wrmp/classes/WrmpInstaller.php';
-	}
-
 	WrmpInstaller::getInstance()->install();
 }
 
@@ -149,10 +145,6 @@ function wrmp_deactivate()
  */
 function wrmp_uninstall()
 {
-	if (!class_exists('WildcardPluginInstaller')) {
-		require_once MYBB_ROOT.'inc/plugins/wrmp/classes/WrmpInstaller.php';
-	}
-
 	WrmpInstaller::getInstance()->uninstall();
 
 	// delete our cached version
