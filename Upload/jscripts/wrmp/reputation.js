@@ -7,8 +7,6 @@
  */
 
 !function($, m) {
-	var $super = m.submitReputation;
-
 	function submitReputation(uid, pid, del)
 	{
 		// Get form, serialize it and send it
@@ -30,7 +28,7 @@
 				window.location.reload();
 			},
 			error: function(){
-				  alert(lang.unknown_error);
+				alert(lang.unknown_error);
 			}
 		});
 
