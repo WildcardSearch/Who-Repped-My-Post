@@ -132,6 +132,8 @@ function wrmp_activate()
 
 	find_replace_templatesets('postbit', "#" . preg_quote('{$post[\'button_rep\']}') . "#i", '{$post[\'button_rep\']}{$post[\'wrmp_below\']}');
 
+	find_replace_templatesets('footer', '#^(.*?)$#s', '$1{$wrmpJs}');
+
 	// if we just upgraded . . .
 	$old_version = wrmp_get_cache_version();
 	$info = wrmp_info();
@@ -155,6 +157,8 @@ function wrmp_deactivate()
 	find_replace_templatesets('postbit', "#" . preg_quote('{$post[\'wrmp_postbit\']}') . "#i", '');
 	find_replace_templatesets('postbit_classic', "#" . preg_quote('{$post[\'wrmp_postbit\']}') . "#i", '');
 	find_replace_templatesets('postbit', "#" . preg_quote('{$post[\'wrmp_below\']}') . "#i", '');
+
+	find_replace_templatesets('footer', "#" . preg_quote('{$wrmpJs}') . "#i", '');
 
 	wrmp_unset_cache_version();
 }

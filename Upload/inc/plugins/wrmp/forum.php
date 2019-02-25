@@ -264,6 +264,21 @@ function wrmp_initialize()
 	global $templatelist, $plugins;
 	$templatelist .= ',wrmp_reps_negative,wrmp_reps_neutral,wrmp_reps_positive,wrmp_postbit,wrmp_post,wrmp_below';
 	$plugins->add_hook('postbit', 'wrmp_postbit');
+	$plugins->add_hook('global_intermediate', 'wrmp_add_js');
+}
+
+/**
+ * add JS to override standard post-rep behavior
+ *
+ * @return: void
+ */
+function wrmp_add_js()
+{
+	global $mybb, $wrmpJs;
+
+	$wrmpJs = <<<EOF
+<script type="text/javascript" src="{$mybb->asset_url}/jscripts/wrmp/reputation.js"></script>
+EOF;
 }
 
 ?>
