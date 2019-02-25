@@ -31,8 +31,6 @@ function wrmp_info()
 </ul>
 EOF;
 
-		$buttonPic = "styles/{$cp_style}/images/wrmp/donate.gif";
-		$borderPic = "styles/{$cp_style}/images/wrmp/pixel.gif";
 		$wrmpDescription = <<<EOF
 <table width="100%">
 	<tbody>
