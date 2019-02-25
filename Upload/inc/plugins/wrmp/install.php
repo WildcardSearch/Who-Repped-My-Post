@@ -41,12 +41,7 @@ EOF;
 				{$lang->wrmp_description}{$extraLinks}
 			</td>
 			<td style="text-align: center;">
-				<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
-					<input type="hidden" name="cmd" value="_s-xclick">
-					<input type="hidden" name="hosted_button_id" value="VA5RFLBUC4XM4">
-					<input type="image" src="{$buttonPic}" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
-					<img alt="" border="0" src="{$borderPic}" width="1" height="1">
-				</form>
+				<a href="https://paypal.me/wildcardsearch"><img src="styles/{$cp_style}/images/wrmp/donate.gif" style="outline: none; border: none;" /></a>
 			</td>
 		</tr>
 	</tbody>
