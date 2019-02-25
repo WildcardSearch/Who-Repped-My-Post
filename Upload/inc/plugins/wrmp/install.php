@@ -63,7 +63,7 @@ EOF;
 		"website" => 'https://github.com/WildcardSearch/Who-Repped-My-Post',
 		"author" => $author,
 		"authorsite" => 'http://www.rantcentralforums.com',
-		"version" => '2.0',
+		"version" => WRMP_VERSION,
 		"compatibility" => '18*',
 		'codename' => 'wrmp',
 	);
@@ -112,9 +112,8 @@ function wrmp_activate()
 
 	// if we just upgraded...
 	$oldVersion = wrmpGetCacheVersion();
-	$wrmpInfo = wrmp_info();
 
-	if (version_compare($oldVersion, $wrmpInfo['version'], '<')) {
+	if (version_compare($oldVersion, WRMP_VERSION, '<')) {
 		wrmp_install();
 	}
 
@@ -251,12 +250,9 @@ function wrmpSetCacheVersion()
 {
 	global $cache;
 
-	// get version from this plugin file
-	$wrmpInfo = wrmp_info();
-
 	// update version cache to latest
 	$wrmp = $cache->read('wrmp');
-	$wrmp['version'] = $wrmpInfo['version'];
+	$wrmp['version'] = WRMP_VERSION;
 	$cache->update('wrmp', $wrmp);
     return true;
 }

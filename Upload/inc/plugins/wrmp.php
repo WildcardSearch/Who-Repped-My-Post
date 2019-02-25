@@ -12,6 +12,8 @@ if (!defined('IN_MYBB')) {
 	die('Direct initialization of this file is not allowed.<br /><br />Please make sure IN_MYBB is defined.');
 }
 
+define('WRMP_VERSION', '2.0');
+
 // register custom class autoloader
 spl_autoload_register('wrmpClassAutoload');
 
