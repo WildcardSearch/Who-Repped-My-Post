@@ -8,67 +8,57 @@
  */
 
 // add only the necessary hooks, cache templates
-wrmp_initialize();
+wrmpInitialize();
 
 /**
- * wrmp_postbit()
- *
  * display post reps info where applicable
  *
- * @param - &$post - (array) the current post info
- * @return: void
+ * @param  array post info
+ * @return void
  */
-function wrmp_postbit(&$post)
+function wrmpPostbit(&$post)
 {
 	global $db, $mybb, $templates, $lang;
 	static $wrmp;
 
-	if(!$lang->wrmp)
-	{
+	if (!$lang->wrmp) {
 		$lang->load('wrmp');
 	}
 
-	if(!isset($wrmp))
-	{
-		wrmp_build_cache($wrmp);
+	if (!isset($wrmp)) {
+		wrmpBuildCache($wrmp);
 	}
 
 	$pid = (int) $post['pid'];
 
-	if(!isset($wrmp[$pid]))
-	{
+	if (!isset($wrmp[$pid])) {
 		return;
 	}
 
-	switch($mybb->settings['wrmp_position']) {
+	switch ($mybb->settings['wrmp_position']) {
 	case 'postbit':
-		if($mybb->settings['postlayout'] == "classic")
-		{
-			eval("\$post['wrmp_postbit'] = \"" . $templates->get('wrmp_postbit_classic') . "\";");
-		}
-		else
-		{
-			eval("\$post['wrmp_postbit'] = \"" . $templates->get('wrmp_postbit') . "\";");
+		if ($mybb->settings['postlayout'] == 'classic') {
+			eval("\$post['wrmp_postbit'] = \"{$templates->get('wrmp_postbit_classic')}\";");
+		} else {
+			eval("\$post['wrmp_postbit'] = \"{$templates->get('wrmp_postbit')}\";");
 		}
 		break;
 	case 'post':
-		eval("\$post['message'] .= \"" . $templates->get('wrmp_post') . "\";");
+		eval("\$post['message'] .= \"{$templates->get('wrmp_post')}\";");
 		break;
 	default:
-		eval("\$post['wrmp_below'] = \"" . $templates->get('wrmp_below') . "\";");
+		eval("\$post['wrmp_below'] = \"{$templates->get('wrmp_below')}\";");
 		break;
 	}
 }
 
 /**
- * wrmp_build_cache()
- *
  * build the rep info for all the posts on this page
  *
- * @param - &$wrmp - (array) a reference to the post rep cache
- * @return - void
+ * @param  array a reference to the post rep cache
+ * @return void
  */
-function wrmp_build_cache(&$wrmp)
+function wrmpBuildCache(&$wrmp)
 {
 	global $db, $pids, $mybb, $templates, $lang, $theme;
 
@@ -76,8 +66,7 @@ function wrmp_build_cache(&$wrmp)
 
 	// build the WHERE clause
 	$where = "p.{$pids}";
-	if($mybb->input['mode'] == 'threaded')
-	{
+	if ($mybb->input['mode'] == 'threaded') {
 		$where = "p.pid={$mybb->input['pid']}";
 	}
 
@@ -96,139 +85,119 @@ WHERE
 ORDER BY
 	r.dateline DESC;
 EOF;
+
 	$query = $db->query($query_string);
-	if($db->num_rows($query) == 0)
-	{
+	if ($db->num_rows($query) == 0) {
 		return;
 	}
 
-	$all_reps = array();
-	while($user = $db->fetch_array($query))
-	{
-		$all_reps[$user['pid']][$user['uid']] = $user;
+	$allReps = array();
+	while ($user = $db->fetch_array($query)) {
+		$allReps[$user['pid']][$user['uid']] = $user;
 	}
 
-	foreach($all_reps as $pid => $users)
-	{
-		$other_reps = '';
-		$too_many_names = $too_many = $rep_count = $reppers = array();
+	foreach ($allReps as $pid => $users) {
+		$otherReps = '';
+		$tooManyNames = $tooMany = $repCount = $reppers = array();
 
-		$did_something = false;
-		foreach($users as $uid => $user)
-		{
-			switch(true) {
+		$didSomething = false;
+		foreach ($users as $uid => $user) {
+			switch (true) {
 			case $user['repvalue'] < 0:
-				$rep_value = 'negative';
+				$repValue = 'negative';
 				break;
 			case $user['repvalue'] == 0:
-				$rep_value = 'neutral';
+				$repValue = 'neutral';
 				break;
 			case $user['repvalue'] > 0:
-				$rep_value = 'positive';
-				$user['repvalue'] = '+' . $user['repvalue'];
+				$repValue = 'positive';
+				$user['repvalue'] = '+'.$user['repvalue'];
 				break;
 			}
 
 			// if admin isn't showing this rep type, skip it
-			$setting_name = "wrmp_show_{$rep_value}";
-			if(!$mybb->settings[$setting_name])
-			{
+			if (!$mybb->settings["wrmp_show_{$repValue}"]) {
 				continue;
 			}
 
-			// if we have reached the max for this type of rep . . .
-			++$rep_count[$rep_value];
-			if($rep_count[$rep_value] > $mybb->settings['wrmp_max_' . $rep_value])
-			{
+			// if we have reached the max for this type of rep...
+			++$repCount[$repValue];
+			if ($repCount[$repValue] > $mybb->settings['wrmp_max_'.$repValue]) {
 				// add it to our overage list and skip
-				$too_many_names[$rep_value][] = $user['username'];
-				$too_many[$rep_value] = true;
+				$tooManyNames[$repValue][] = $user['username'];
+				$tooMany[$repValue] = true;
 				continue;
 			}
 
 			$comments = '';
-			if($user['comments'])
-			{
-				$comments = ': ' . nl2br(htmlspecialchars_uni($user['comments']));
+			if ($user['comments']) {
+				$comments = ': '.nl2br(htmlspecialchars_uni($user['comments']));
 			}
 
 			// build the name link
-			$user_name = format_name($user['username'], $user['usergroup'], $user['displaygroup']);
+			$userName = format_name($user['username'], $user['usergroup'], $user['displaygroup']);
 
-			$user_name = str_replace('style="', 'style="background-image: none; padding-left: 0px; ', $user_name);
+			$userName = str_replace('style="', 'style="background-image: none; padding-left: 0px; ', $userName);
 
-			$user_link = get_profile_link($user['uid']);
-			eval("\$reppers[\$rep_value][] = \"" . $templates->get('wrmp_user_link', 1, 0) . "\";");
-			$did_something = true;
+			$userLink = get_profile_link($user['uid']);
+			eval("\$reppers[\$repValue][] = \"{$templates->get('wrmp_user_link', 1, 0)}\";");
+			$didSomething = true;
 		}
 
 		$sep = '';
-		foreach($reppers as $rep_value => $repper)
-		{
+		foreach ($reppers as $repValue => $repper) {
 			/*
 			 * if there are more reps than admin has allowed to show
 			 * display the overage in the title text
 			 */
-			if($too_many[$rep_value])
-			{
+			if ($tooMany[$repValue]) {
 				$other = $lang->wrmp_other;
-				$over_count = $rep_count[$rep_value] - $mybb->settings['wrmp_max_' . $rep_value];
-				if($over_count > 1)
-				{
+				$overCount = $repCount[$repValue] - $mybb->settings['wrmp_max_'.$repValue];
+				if ($overCount > 1) {
 					$other = $lang->wrmp_others;
 				}
 
 				// pop the last name off the stack
-				$last_repper = array_pop($too_many_names[$rep_value]);
+				$lastRepper = array_pop($tooManyNames[$repValue]);
 
 				// comma-separate the rest (if any)
-				$others_list = implode("{$lang->comma}", $too_many_names[$rep_value]);
+				$othersList = implode($lang->comma, $tooManyNames[$repValue]);
 
 				// if there were others, use 'and'
-				if($others_list)
-				{
-					$others_list .= " {$lang->and} {$last_repper}";
-				}
-				else
-				{
+				if ($othersList) {
+					$othersList .= " {$lang->and} {$lastRepper}";
+				} else {
 					// if not, just list the single name
-					$others_list = $last_repper;
+					$othersList = $lastRepper;
 				}
-				eval("\$other_reps = \"" . $templates->get('wrmp_other_reps') . "\";");
+				eval("\$otherReps = \"{$templates->get('wrmp_other_reps')}\";");
 			}
 
 			// pop the last name off the stack
-			$last_repper = array_pop($repper);
+			$lastRepper = array_pop($repper);
 
 			// comma-separate the rest (if any)
-			$who_repped_me = implode("{$lang->comma}", (array) $repper);
+			$whoReppedMe = implode($lang->comma, (array) $repper);
 
-			// if there were other names . . .
-			if($who_repped_me)
-			{
-				// if there was an overage . . .
-				if($other_reps)
-				{
+			// if there were other names...
+			if ($whoReppedMe) {
+				// if there was an overage...
+				if ($otherReps) {
 					// use comma sep (and is coming from overage text)
-					$who_repped_me .= "{$lang->comma} {$last_repper}";
-				}
-				else
-				{
+					$whoReppedMe .= "{$lang->comma} {$lastRepper}";
+				} else {
 					// use and
-					$who_repped_me .= " {$lang->and} {$last_repper}";
+					$whoReppedMe .= " {$lang->and} {$lastRepper}";
 				}
-			}
-			else
-			{
+			} else {
 				// just list the single name
-				$who_repped_me = $last_repper;
+				$whoReppedMe = $lastRepper;
 			}
 
-			eval("\$wrmp[\$pid] .= \"" . $templates->get("wrmp_reps_{$rep_value}") . "\";");
+			eval("\$wrmp[\$pid] .= \"{$templates->get("wrmp_reps_{$repValue}")}\";");
 
 			// below post doesn't need line breaks
-			if($mybb->settings['wrmp_position'] != 'below')
-			{
+			if ($mybb->settings['wrmp_position'] != 'below') {
 				$sep = '<br />';
 			}
 		}
@@ -236,13 +205,11 @@ EOF;
 }
 
 /**
- * wrmp_initialize()
- *
  * hook into the postbit and cache templates if applicable
  *
- * @return: void
+ * @return void
  */
-function wrmp_initialize()
+function wrmpInitialize()
 {
 	global $mybb;
 
@@ -250,21 +217,20 @@ function wrmp_initialize()
 	 * only hook if we are in showthread and at least one rep power
 	 * is enabled for display
 	 */
-	if(THIS_SCRIPT != 'showthread.php' ||
+	if (THIS_SCRIPT != 'showthread.php' ||
 	   (!$mybb->settings['wrmp_show_negative'] &&
 	    !$mybb->settings['wrmp_show_neutral'] &&
 	    !$mybb->settings['wrmp_show_positive']) ||
 	   (!$mybb->settings['wrmp_max_negative'] &&
 	    !$mybb->settings['wrmp_max_neutral'] &&
-		!$mybb->settings['wrmp_show_positive']))
-	{
+		!$mybb->settings['wrmp_show_positive'])) {
 		return;
 	}
 
 	global $templatelist, $plugins;
 	$templatelist .= ',wrmp_reps_negative,wrmp_reps_neutral,wrmp_reps_positive,wrmp_postbit,wrmp_post,wrmp_below';
-	$plugins->add_hook('postbit', 'wrmp_postbit');
-	$plugins->add_hook('global_intermediate', 'wrmp_add_js');
+	$plugins->add_hook('postbit', 'wrmpPostbit');
+	$plugins->add_hook('global_intermediate', 'wrmpAddJs');
 }
 
 /**
@@ -272,7 +238,7 @@ function wrmp_initialize()
  *
  * @return: void
  */
-function wrmp_add_js()
+function wrmpAddJs()
 {
 	global $mybb, $wrmpJs;
 
