@@ -110,14 +110,16 @@ function wrmp_activate()
 
 	find_replace_templatesets('footer', '#^(.*?)$#s', '$1{$wrmpJs}');
 
+	$myCache = WrmpCache::getInstance();
+
 	// if we just upgraded...
-	$oldVersion = wrmpGetCacheVersion();
+	$oldVersion = $myCache->getVersion();
 
 	if (version_compare($oldVersion, WRMP_VERSION, '<')) {
 		wrmp_install();
 	}
 
-	wrmpSetCacheVersion();
+	$myCache->setVersion(WRMP_VERSION);
 }
 
 /**
@@ -145,7 +147,7 @@ function wrmp_uninstall()
 	WrmpInstaller::getInstance()->uninstall();
 
 	// delete our cached version
-	wrmpClearCacheVersion();
+	WrmpCache::getInstance()->clear();
 }
 
 /*
@@ -220,55 +222,6 @@ function wrmpBuildSettingsLink()
 	return <<<EOF
 <a href="{$url}" title="{$lang->wrmp_plugin_settings}">{$lang->wrmp_plugin_settings}</a>
 EOF;
-}
-
-/**
- * check cached version info
- *
- * @return string|int
- */
-function wrmpGetCacheVersion()
-{
-	global $cache;
-
-	// get currently installed version, if there is one
-	$wrmp = $cache->read('wrmp');
-
-	if ($wrmp['version']) {
-        return $wrmp['version'];
-	}
-
-    return 0;
-}
-
-/**
- * set cached version info
- *
- * @return bool
- */
-function wrmpSetCacheVersion()
-{
-	global $cache;
-
-	// update version cache to latest
-	$wrmp = $cache->read('wrmp');
-	$wrmp['version'] = WRMP_VERSION;
-	$cache->update('wrmp', $wrmp);
-    return true;
-}
-
-/**
- * remove cached version info
- * derived from the work of pavemen in MyBB Publisher
- *
- * @return bool
- */
-function wrmpClearCacheVersion()
-{
-	global $cache;
-
-	$cache->update('wrmp', null);
-    return true;
 }
 
 ?>
