@@ -95,11 +95,10 @@ function wrmp_install()
 	}
 
 	if (!class_exists('WildcardPluginInstaller')) {
-		require_once MYBB_ROOT.'inc/plugins/wrmp/classes/installer.php';
+		require_once MYBB_ROOT.'inc/plugins/wrmp/classes/WrmpInstaller.php';
 	}
 
-	$installer = new WildcardPluginInstaller(MYBB_ROOT.'inc/plugins/wrmp/install_data.php');
-	$installer->install();
+	WrmpInstaller::getInstance()->install();
 }
 
 /**
@@ -151,11 +150,10 @@ function wrmp_deactivate()
 function wrmp_uninstall()
 {
 	if (!class_exists('WildcardPluginInstaller')) {
-		require_once MYBB_ROOT.'inc/plugins/wrmp/classes/installer.php';
+		require_once MYBB_ROOT.'inc/plugins/wrmp/classes/WrmpInstaller.php';
 	}
 
-	$installer = new WildcardPluginInstaller(MYBB_ROOT.'inc/plugins/wrmp/install_data.php');
-	$installer->uninstall();
+	WrmpInstaller::getInstance()->uninstall();
 
 	// delete our cached version
 	wrmpClearCacheVersion();
